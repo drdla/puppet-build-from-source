@@ -5,6 +5,9 @@
 #   creates   => '/usr/local/bin/top',
 # }
 
+# TODO: add additional moduleS to download and extract
+# TODO: add additional patcheS to download and apply
+
 define build::install ($download, $creates, $pkg_folder = '', $pkg_format = 'tar', $pkg_extension = '', $buildoptions = '', $extractorcmd = '', $rm_build_folder = true) {
 
   build::requires { "$name-requires-development-tools":
@@ -71,7 +74,7 @@ define build::install ($download, $creates, $pkg_folder = '', $pkg_format = 'tar
 
   case $rm_build_folder {
     true: {
-      notice('remove build folder')
+      notice('Removing build folder')
       exec { "remove-$name-build-folder":
         cwd         => "$cwd",
         command     => "/usr/bin/rm -rf $cwd/$foldername",
@@ -83,11 +86,13 @@ define build::install ($download, $creates, $pkg_folder = '', $pkg_format = 'tar
 }
 
 define build::requires ($ensure = 'installed', $package) {
+
   if defined(Package[$package]) {
     debug("$package already installed")
   } else {
     package { $package:
-      ensure        => $ensure
+      ensure => $ensure
     }
   }
+
 }
